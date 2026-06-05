@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fedor Naumenko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Baloo+2:wght@400;600;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 8-bit Character (fixed on right side) -->
+  <div class="character-container" id="character">
+    <canvas id="pixel-char" width="64" height="96"></canvas>
+    <div class="char-speech" id="char-speech"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="section hero" id="hero">
+    <div class="pixel-bg" id="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Fedor Naumenko</h1>
+      <p class="hero-role">AI Engineer & Support Tech Lead</p>
+      <p class="hero-blurb">
+        Building production LLM agent systems at Quicklizard.
+        Python, multi-agent orchestration, MCP, and too many integrations to list.
+      </p>
+      <div class="scroll-hint">
+        <span>scroll down</span>
+        <div class="scroll-arrow">v v v</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="section experience" id="experience">
+    <div class="pixel-bg" id="exp-bg"></div>
+    <div class="section-inner">
+      <h2 class="section-title">Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item card wobble" data-year="2026">
+          <div class="timeline-dot"></div>
+          <h3>AI Engineer</h3>
+          <span class="company">Quicklizard</span>
+          <span class="tenure">Jan 2026 - Present</span>
+          <p>Build and operate production LLM-based agent systems adopted across multiple teams.
+             Design multi-agent workflows over REST APIs, webhooks, and MCP servers across
+             Zendesk, Slack, BigQuery, GitHub, AWS S3, and Kubernetes.</p>
+        </div>
+        <div class="timeline-item card wobble" data-year="2025">
+          <div class="timeline-dot"></div>
+          <h3>Support Tech Lead</h3>
+          <span class="company">Quicklizard</span>
+          <span class="tenure">Sep 2025 - Present</span>
+          <p>Lead the Technical Support team handling tier-1/2 incidents for 50+ enterprise clients.
+             Bridge between Support, R&D, and Tech Operations. Drive AI adoption inside the team.</p>
+        </div>
+        <div class="timeline-item card wobble" data-year="2024">
+          <div class="timeline-dot"></div>
+          <h3>Technical Support Specialist</h3>
+          <span class="company">Quicklizard</span>
+          <span class="tenure">Jan 2024 - Sep 2025</span>
+          <p>Tier-2 support for an enterprise pricing platform. Wrote Python and SQL scripts,
+             ran kubectl ops against production clusters. Built the internal knowledge base (50+ docs)
+             that became the grounding corpus for the AI agents.</p>
+        </div>
+        <div class="timeline-item card wobble" data-year="2017">
+          <div class="timeline-dot"></div>
+          <h3>Technician, Combat Intelligence</h3>
+          <span class="company">IDF</span>
+          <span class="tenure">Jun 2017 - Oct 2021</span>
+          <p>Installed, maintained, and repaired ground surveillance radars, electro-optical systems,
+             servers, and field networks. Trained personnel on operations and troubleshooting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="section projects" id="projects">
+    <div class="pixel-bg" id="proj-bg"></div>
+    <div class="section-inner">
+      <h2 class="section-title">Side Projects</h2>
+      <div class="projects-grid">
+
+        <div class="project-card card wobble">
+          <div class="project-media">
+            <div class="media-placeholder">demo coming soon</div>
+          </div>
+          <div class="project-info">
+            <a href="https://github.com/FedorNaumenko/fplsolver" target="_blank" rel="noopener" class="project-name">FPL Solver</a>
+            <p>Fantasy Premier League transfer advisor. Helps FPL managers pick smarter transfers based on form, fixtures, and projected points.</p>
+            <div class="project-tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">FPL API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card card wobble">
+          <div class="project-media">
+            <div class="media-placeholder">demo coming soon</div>
+          </div>
+          <div class="project-info">
+            <a href="https://github.com/FedorNaumenko/Sal-Kal" target="_blank" rel="noopener" class="project-name">Sal-Kal</a>
+            <p>Calorie and nutrition tracking app with a Python backend for logging meals and monitoring daily intake.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Full Stack</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card card wobble">
+          <div class="project-media">
+            <div class="media-placeholder">demo coming soon</div>
+          </div>
+          <div class="project-info">
+            <span class="project-name project-wip-name">World Cup Predictor <span class="wip-tag">WIP</span></span>
+            <p>Predicts World Cup match results using historical data and statistical modeling.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">ML</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section class="section education" id="education">
+    <div class="pixel-bg" id="edu-bg"></div>
+    <div class="section-inner">
+      <h2 class="section-title">Education</h2>
+      <div class="edu-list">
+        <div class="card edu-card wobble">
+          <h3>B.Sc. Software Engineering</h3>
+          <span class="company">Bar-Ilan University, Ramat Gan</span>
+          <span class="tenure">2024 - 2025</span>
+        </div>
+        <div class="card edu-card wobble">
+          <h3>Pre-Academic Preparatory Program</h3>
+          <span class="company">Bar-Ilan University, Ramat Gan</span>
+          <span class="tenure">2021 - 2022</span>
+        </div>
+        <div class="card edu-card wobble">
+          <h3>Software Technician</h3>
+          <span class="company">ORT College, Netanya</span>
+          <span class="tenure">2016 - 2017</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section contact" id="contact">
+    <div class="pixel-bg" id="contact-bg"></div>
+    <div class="section-inner">
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="card card-contact wobble">
+        <p>Want to collaborate, chat about AI agents, or just say hi?</p>
+        <div class="contact-links">
+          <a href="https://github.com/FedorNaumenko" class="contact-btn" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/fedor-naumenko/" class="contact-btn" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="mailto:fedornaumenko1998@gmail.com" class="contact-btn">Email</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Fedor Naumenko, 2025</p>
+  </footer>
+
+  <canvas id="transition-overlay"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
