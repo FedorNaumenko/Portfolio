@@ -672,93 +672,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let transitionActive = false;
 
-  const themeStyles = {
-    space:      { colors: ['#0d0d2a', '#5fd0ff'], motif: 'star' },
-    mario:      { colors: ['#5c94fc', '#ffd23f'], motif: 'coin' },
-    aladdin:    { colors: ['#c97a2a', '#ffd23f'], motif: 'sparkle' },
-    gargoyles:  { colors: ['#0a0618', '#7e57c2'], motif: 'bat' },
-    pocahontas: { colors: ['#0d2b3e', '#56b86b'], motif: 'leaf' },
-  };
-
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  }
-
-  function drawMotif(g, x, y, motif, color, t) {
-    g.save();
-    g.translate(x, y);
-    if (motif === 'star') {
-      g.fillStyle = color;
-      g.fillRect(-1.5, -7, 3, 14);
-      g.fillRect(-7, -1.5, 14, 3);
-    } else if (motif === 'coin') {
-      const w = Math.abs(Math.cos(t * 9)) * 12 + 3;
-      g.fillStyle = color;
-      g.beginPath();
-      g.ellipse(0, 0, w / 2, 9, 0, 0, Math.PI * 2);
-      g.fill();
-    } else if (motif === 'sparkle') {
-      g.rotate(t * 3);
-      g.fillStyle = color;
-      g.beginPath();
-      g.moveTo(0, -8); g.lineTo(2.5, -2.5); g.lineTo(8, 0); g.lineTo(2.5, 2.5);
-      g.lineTo(0, 8); g.lineTo(-2.5, 2.5); g.lineTo(-8, 0); g.lineTo(-2.5, -2.5);
-      g.closePath();
-      g.fill();
-    } else if (motif === 'bat') {
-      const flap = Math.sin(t * 18) * 5;
-      g.fillStyle = color;
-      g.fillRect(-3, -4, 6, 9);
-      g.beginPath();
-      g.moveTo(-3, 0); g.lineTo(-16, -4 - flap); g.lineTo(-9, 4); g.closePath(); g.fill();
-      g.beginPath();
-      g.moveTo(3, 0); g.lineTo(16, -4 - flap); g.lineTo(9, 4); g.closePath(); g.fill();
-    } else if (motif === 'leaf') {
-      g.rotate(Math.sin(t * 6) * 1.2);
-      g.fillStyle = color;
-      g.beginPath();
-      g.ellipse(0, 0, 8, 3.5, 0, 0, Math.PI * 2);
-      g.fill();
-    }
-    g.restore();
-  }
-
-  // One unified soft wipe: a translucent two-color gradient band sweeps down
-  // the screen with a few theme motifs riding it. Eased, brief, non-blocking.
-  function playTransition(theme) {
-    if (transitionActive || !themeStyles[theme]) return;
+  // Simple dip-to-dark cross-fade between sections. Brief and subtle,
+  // no shapes or wipes; just softens the change of scenery.
+  function playTransition() {
+    if (transitionActive) return;
     transitionActive = true;
     overlay.classList.add('active');
-    const { colors, motif } = themeStyles[theme];
     const W = overlay.width, H = overlay.height;
     const start = performance.now();
-    const dur = 650;
-    const bandH = H * 0.7;
+    const dur = 450;
 
     function frame(now) {
       const t = Math.min(1, (now - start) / dur);
-      const e = easeInOutCubic(t);
       octx.clearRect(0, 0, W, H);
-
-      // fade envelope so the wipe eases in and out
-      octx.globalAlpha = Math.sin(t * Math.PI) * 0.85;
-
-      const bandY = e * (H + bandH * 2) - bandH;
-      const g = octx.createLinearGradient(0, bandY - bandH / 2, 0, bandY + bandH / 2);
-      g.addColorStop(0, 'rgba(0,0,0,0)');
-      g.addColorStop(0.3, colors[0]);
-      g.addColorStop(0.7, colors[1]);
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      octx.fillStyle = g;
-      octx.fillRect(0, bandY - bandH / 2, W, bandH);
-
-      // motifs riding the band
-      for (let i = 0; i < 7; i++) {
-        const mx = ((i + 0.5) / 7) * W + Math.sin(t * 4 + i * 2) * 24;
-        const my = bandY + Math.sin(i * 1.8) * bandH * 0.18;
-        drawMotif(octx, mx, my, motif, i % 2 ? colors[1] : 'rgba(255,255,255,0.9)', t + i * 0.3);
-      }
-
+      octx.globalAlpha = Math.sin(t * Math.PI) * 0.45;
+      octx.fillStyle = '#10101e';
+      octx.fillRect(0, 0, W, H);
       octx.globalAlpha = 1;
 
       if (t < 1) {
