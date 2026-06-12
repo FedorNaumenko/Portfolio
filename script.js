@@ -10,217 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   );
   document.querySelectorAll('.wobble').forEach((el) => observer.observe(el));
 
-  // ===== 8-BIT CHARACTER (faces LEFT toward content) =====
-  const canvas = document.getElementById('pixel-char');
-  const ctx = canvas.getContext('2d');
-  canvas.width = 96;
-  canvas.height = 128;
+  // ===== CHARACTER POSE CONTROLLER =====
+  // The character is an inline SVG; poses are CSS classes that rotate
+  // the arm groups around their shoulder pivots (smooth transitions).
+  const character = document.getElementById('character');
 
-  const P = 3; // pixel size
-
-  function px(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x * P, y * P, P, P);
+  function setPose(name, opts) {
+    character.className =
+      'character-container pose-' + name +
+      (opts && opts.mustache ? ' has-mustache' : '');
   }
-
-  function row(y, startX, colors) {
-    colors.forEach((c, i) => { if (c) px(startX + i, y, c); });
-  }
-
-  const S = '#f5c6a0';      // skin
-  const SD = '#d4a070';      // skin dark
-  const H = '#6b4226';       // hair
-  const HD = '#4a2e18';      // hair dark
-  const SH = '#707070';      // shirt
-  const SHD = '#5a5a5a';     // shirt dark
-  const SHL = '#888';        // shirt light
-  const J = '#3b6db5';       // jeans
-  const JD = '#2a4f82';      // jeans dark
-  const JL = '#4a80c8';      // jeans light
-  const SHO = '#8B6914';     // shoe
-  const SHOD = '#5a4510';    // shoe dark
-  const G = '#c0a880';       // glasses frame
-  const GD = '#a08860';      // glasses dark
-  const GL = '#d8e8f0';      // lens glare
-  const E = '#2d5a2d';       // eye color
-  const EP = '#1a3a1a';      // eye pupil
-  const W = '#fff';          // white
-  const BK = '#2d2d2d';      // black
-  const BT = '#5a4510';      // belt
-  const BU = '#c0a040';      // buckle
-  const M = '#c07060';       // mouth
-  const ST = '#b8a090';      // stubble
-  const GUN = '#444';        // gun
-  const GUND = '#222';       // gun dark
-  const FLASH = '#ffd23f';   // muzzle flash
-
-  // Character facing LEFT (toward page content)
-  function drawHead(mustache) {
-    row(0, 9, [H, H, H, H, H, H, H, H, H, H]);
-    row(1, 8, [HD, H, H, H, H, H, H, H, H, H, HD]);
-    row(2, 7, [HD, H, H, H, H, H, H, H, H, H, H, HD]);
-    row(3, 7, [H, H, H, H, H, H, H, H, H, H, H, H]);
-    row(4, 7, [H, H, H, H, H, H, H, H, H, H, H, H]);
-
-    row(5, 7, [H, S, S, S, S, S, S, S, S, S, S, H]);
-    row(6, 7, [H, S, S, S, S, S, S, S, S, S, S, H]);
-
-    row(7, 7, [H, S, HD, HD, HD, S, S, HD, HD, HD, S, H]);
-
-    row(8,  7, [null, S, G, G, G, G, G, G, G, G, S]);
-    row(9,  7, [null, S, G, GL, E, G, G, GL, E, G, S]);
-    row(10, 7, [null, S, G, EP, EP, G, G, EP, EP, G, S]);
-    row(11, 7, [null, S, G, G, G, GD, G, G, G, G, S]);
-
-    row(12, 8, [S, S, S, S, SD, S, S, S, S, S]);
-    row(13, 8, [S, S, S, SD, SD, S, S, S, S, S]);
-
-    if (mustache) {
-      row(14, 8, [HD, HD, HD, HD, HD, HD, HD, HD, HD, HD]);
-      row(15, 8, [S, S, M, M, M, M, S, S, S, S]);
-    } else {
-      row(14, 8, [S, S, M, M, M, M, S, S, S, S]);
-      row(15, 8, [S, S, S, M, M, S, S, S, S, S]);
-    }
-
-    row(16, 8, [S, ST, S, S, S, S, ST, S, S, S]);
-    row(17, 8, [S, ST, ST, S, S, ST, ST, S, S, S]);
-    row(18, 9, [S, S, S, S, S, S, S, S]);
-
-    row(8, 6, [H]);
-    row(9, 6, [H]);
-    row(10, 6, [HD]);
-    row(11, 6, [S]);
-    row(12, 6, [S]);
-    row(13, 6, [SD]);
-
-    row(9, 5, [G]);
-    row(10, 5, [G]);
-  }
-
-  function drawNeck() {
-    row(19, 11, [S, S, S, S]);
-    row(20, 11, [S, S, S, S]);
-  }
-
-  function drawTorso() {
-    row(21, 8, [SH, SH, SH, SH, SH, SH, SH, SH, SH, SH]);
-    row(22, 7, [SH, SH, SH, SH, SH, SH, SH, SH, SH, SH, SH]);
-    row(23, 7, [SH, SH, SH, SHD, SH, SH, SH, SHD, SH, SH, SH]);
-    row(24, 7, [SH, SH, SH, SH, SHL, SH, SH, SH, SH, SH, SH]);
-    row(25, 7, [SHD, SH, SH, SH, SH, SH, SH, SH, SH, SH, SHD]);
-    row(26, 7, [SHD, SH, SH, SHD, SH, SH, SH, SHD, SH, SH, SHD]);
-    row(27, 7, [SHD, SH, SH, SH, SH, SH, SH, SH, SH, SH, SHD]);
-    row(28, 8, [SHD, SH, SH, SH, SH, SH, SH, SH, SHD]);
-  }
-
-  function drawBelt() {
-    row(29, 8, [BT, BT, BT, BU, BU, BT, BT, BT, BT]);
-  }
-
-  function drawLegs() {
-    row(30, 8, [J, J, J, J, J, J, J, J, J]);
-    row(31, 8, [J, J, J, JD, null, J, J, J, J]);
-    row(32, 8, [J, J, J, null, null, J, J, J, J]);
-    row(33, 8, [J, JL, J, null, null, J, JL, J]);
-    row(34, 8, [J, J, J, null, null, J, J, J]);
-    row(35, 8, [JD, J, J, null, null, J, J, JD]);
-    row(36, 8, [JD, J, JD, null, null, JD, J, JD]);
-    row(37, 8, [J, J, J, null, null, J, J, J]);
-  }
-
-  function drawShoes() {
-    row(38, 7, [SHO, SHO, SHO, SHO, null, null, SHO, SHO, SHO, SHO]);
-    row(39, 6, [SHO, SHO, SHO, SHO, SHOD, null, null, SHO, SHO, SHO, SHO]);
-    row(40, 6, [SHOD, SHOD, SHOD, SHOD, SHOD, null, null, SHOD, SHOD, SHOD, SHOD]);
-  }
-
-  function drawShadow() {
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    ctx.beginPath();
-    ctx.ellipse(13 * P, 41.5 * P, 7 * P, 1.5 * P, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // ===== ARMS =====
-  function drawArmsDefault() {
-    row(22, 5, [SH, SH]); row(23, 4, [SH, SH]); row(24, 4, [SH, SH]);
-    row(25, 3, [SHD, SH]); row(26, 3, [S, S]); row(27, 3, [S, SD]);
-    row(22, 18, [SH, SH]); row(23, 19, [SH, SH]); row(24, 19, [SH, SH]);
-    row(25, 20, [SH, SHD]); row(26, 20, [S, S]); row(27, 20, [SD, S]);
-  }
-
-  function drawArmsWave() {
-    row(22, 5, [SH, SH]); row(23, 4, [SH, SH]); row(24, 4, [SH, SH]);
-    row(25, 3, [SHD, SH]); row(26, 3, [S, S]); row(27, 3, [S, SD]);
-    row(19, 18, [SH, SH]); row(18, 19, [SH, SH]); row(17, 20, [SH, SH]);
-    row(16, 21, [S, S]); row(15, 21, [S, S]);
-    row(14, 21, [S, null, S]); row(13, 21, [S, S, S]);
-  }
-
-  function drawArmsPoint() {
-    row(22, 5, [SH, SH]); row(23, 4, [SH, SH]); row(24, 3, [SH, SH]);
-    row(25, 2, [SH, SH]); row(26, 1, [S, S]); row(27, 0, [S, SD]);
-    px(0, 26, S);
-    row(22, 18, [SH, SH]); row(23, 19, [SH, SH]); row(24, 19, [SH, SH]);
-    row(25, 20, [SH, SHD]); row(26, 20, [S, S]); row(27, 20, [SD, S]);
-  }
-
-  function drawArmsCelebrate() {
-    row(19, 5, [SH, SH]); row(18, 4, [SH, SH]); row(17, 3, [SH, SH]);
-    row(16, 2, [S, S]); row(15, 2, [S, S]);
-    row(19, 18, [SH, SH]); row(18, 19, [SH, SH]); row(17, 20, [SH, SH]);
-    row(16, 21, [S, S]); row(15, 21, [S, S]);
-  }
-
-  function drawArmsThumbsUp() {
-    row(22, 5, [SH, SH]); row(23, 4, [SH, SH]); row(24, 3, [SH, SH]);
-    row(25, 3, [S, S]); row(24, 2, [S]); row(23, 2, [S]);
-    row(22, 2, [S]); row(21, 2, [S]); row(20, 2, [S]);
-    row(22, 18, [SH, SH]); row(23, 19, [SH, SH]); row(24, 19, [SH, SH]);
-    row(25, 20, [SH, SHD]); row(26, 20, [S, S]); row(27, 20, [SD, S]);
-  }
-
-  function drawArmsShoot(flash) {
-    // Near arm extended LEFT holding a gun (toward content)
-    row(23, 5, [SH, SH]); row(24, 4, [SH, SH]); row(24, 3, [S, S]);
-    // Gun
-    row(23, 1, [GUND, GUND]);
-    row(24, 0, [GUN, GUN, GUN, GUN]);
-    row(25, 1, [GUND, GUND]);
-    if (flash) {
-      px(-1 < 0 ? 0 : 0, 24, FLASH);
-      ctx.fillStyle = FLASH;
-      ctx.fillRect(-2 * P, 23 * P, 2 * P, 3 * P);
-      ctx.fillRect(-3 * P, 24 * P, 1 * P, 1 * P);
-    }
-    // Far arm relaxed
-    row(22, 18, [SH, SH]); row(23, 19, [SH, SH]); row(24, 19, [SH, SH]);
-    row(25, 20, [SH, SHD]); row(26, 20, [S, S]); row(27, 20, [SD, S]);
-  }
-
-  function drawCharacter(pose, opts) {
-    opts = opts || {};
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawShadow();
-    drawHead(opts.mustache);
-    drawNeck();
-    drawTorso();
-    drawBelt();
-    drawLegs();
-    drawShoes();
-
-    switch (pose) {
-      case 'wave':      drawArmsWave(); break;
-      case 'point':     drawArmsPoint(); break;
-      case 'celebrate': drawArmsCelebrate(); break;
-      case 'thumbsup':  drawArmsThumbsUp(); break;
-      case 'shoot':     drawArmsShoot(opts.flash); break;
-      default:          drawArmsDefault(); break;
-    }
-  }
-
-  drawCharacter('wave');
 
   // ===== HELPERS =====
   function shadeColor(hex, percent) {
@@ -417,73 +216,151 @@ document.addEventListener('DOMContentLoaded', () => {
     draw();
   }
 
-  // ===== PROJECTS: ALADDIN (Agrabah) =====
+  // ===== PROJECTS: ALADDIN (Sega, 1993: blue sky, orange Agrabah walls, dunes) =====
   function createAgrabah(container) {
     const { c } = makeCanvas(container);
     const cx = c.getContext('2d');
     let frame = 0;
-    const gems = Array.from({ length: 5 }, (_, i) => ({
-      x: 0.12 + i * 0.18, y: 0.25 + (i % 3) * 0.12,
-      tw: i, color: ['#4ecdc4', '#ff6b6b', '#ffd23f', '#b39ddb', '#5fd0ff'][i],
+    const gems = Array.from({ length: 3 }, (_, i) => ({
+      x: 0.36 + i * 0.14, tw: i * 2.1,
+      color: ['#ff6b6b', '#4ecdc4', '#b39ddb'][i],
     }));
 
-    function draw() {
-      const grad = cx.createLinearGradient(0, 0, 0, c.height);
-      grad.addColorStop(0, '#3a2a6e');
-      grad.addColorStop(0.5, '#c96a3a');
-      grad.addColorStop(1, '#f2a65a');
-      cx.fillStyle = grad;
-      cx.fillRect(0, 0, c.width, c.height);
-
-      // moon
-      cx.fillStyle = 'rgba(255,240,200,0.85)';
-      cx.beginPath();
-      cx.arc(c.width * 0.8, c.height * 0.2, 36, 0, Math.PI * 2);
-      cx.fill();
-
-      const horizon = c.height - 90;
-
-      // palace silhouettes
-      cx.fillStyle = '#2a1a3e';
-      function dome(x, w, h) {
-        cx.fillRect(x, horizon - h, w, h);
-        cx.beginPath();
-        cx.arc(x + w / 2, horizon - h, w / 2, Math.PI, 0);
-        cx.fill();
-        // spike
-        cx.fillRect(x + w / 2 - 2, horizon - h - w / 2 - 14, 4, 14);
+    function drawWall(x, w, duneY) {
+      // big flat orange wall mass with dither texture and arched windows
+      cx.fillStyle = '#c97a2a';
+      cx.fillRect(x, 0, w, duneY + 30);
+      // dither speckles (deterministic)
+      for (let i = 0; i < 120; i++) {
+        const sx = x + ((i * 137 + 41) % w);
+        const sy = ((i * 89 + 17) % (duneY + 20));
+        cx.fillStyle = i % 3 === 0 ? '#e09a4a' : '#a85a18';
+        cx.fillRect(sx, sy, 4, 4);
       }
-      dome(c.width * 0.1, 50, 120);
-      dome(c.width * 0.22, 70, 170);
-      dome(c.width * 0.34, 44, 100);
-      dome(c.width * 0.62, 60, 150);
-      dome(c.width * 0.74, 40, 110);
-      // minarets
-      cx.fillRect(c.width * 0.5, horizon - 200, 16, 200);
+      // edge shading
+      cx.fillStyle = '#a85a18';
+      if (x === 0) cx.fillRect(x + w - 8, 0, 8, duneY + 30);
+      else cx.fillRect(x, 0, 8, duneY + 30);
+      // pointed-arch windows
+      cx.fillStyle = '#3a1f0e';
+      [0.22, 0.55].forEach((fy) => {
+        const wy = fy * duneY;
+        const wx = x + w / 2 - 14;
+        cx.fillRect(wx, wy, 28, 38);
+        cx.beginPath();
+        cx.moveTo(wx, wy);
+        cx.quadraticCurveTo(wx + 14, wy - 26, wx + 28, wy);
+        cx.fill();
+      });
+      // protruding wooden beam
+      const bx = x === 0 ? x + w - 6 : x - 34;
+      cx.fillStyle = '#8a5a2a';
+      cx.fillRect(bx, duneY * 0.4, 40, 9);
+      cx.fillStyle = '#6b4220';
+      cx.fillRect(bx, duneY * 0.4 + 9, 40, 3);
+    }
+
+    function drawPalm(x, baseY, h) {
+      // curved trunk
+      cx.strokeStyle = '#8a5a2a';
+      cx.lineWidth = 9;
+      cx.lineCap = 'round';
       cx.beginPath();
-      cx.moveTo(c.width * 0.5 - 4, horizon - 200);
-      cx.lineTo(c.width * 0.5 + 8, horizon - 230);
-      cx.lineTo(c.width * 0.5 + 20, horizon - 200);
+      cx.moveTo(x, baseY);
+      cx.quadraticCurveTo(x + 8, baseY - h * 0.6, x - 4, baseY - h);
+      cx.stroke();
+      // fronds
+      const tx = x - 4, ty = baseY - h;
+      const sway = Math.sin(frame * 0.02 + x) * 3;
+      cx.fillStyle = '#2e8b4f';
+      for (let a = 0; a < 6; a++) {
+        const ang = Math.PI * (0.15 + a * 0.14) + sway * 0.01;
+        cx.save();
+        cx.translate(tx, ty);
+        cx.rotate(ang - Math.PI / 2);
+        cx.beginPath();
+        cx.ellipse(26, 0, 28, 8, 0, 0, Math.PI * 2);
+        cx.fill();
+        cx.restore();
+      }
+      cx.fillStyle = '#1f6b3a';
+      cx.beginPath();
+      cx.arc(tx, ty, 7, 0, Math.PI * 2);
       cx.fill();
+    }
+
+    function draw() {
+      // bright game-blue sky
+      cx.fillStyle = '#4da6e8';
+      cx.fillRect(0, 0, c.width, c.height);
+      cx.fillStyle = '#7cc4f0';
+      cx.fillRect(0, c.height * 0.45, c.width, c.height * 0.2);
+
+      // pale clouds
+      cx.fillStyle = 'rgba(255,255,255,0.75)';
+      for (let i = 0; i < 3; i++) {
+        const clx = ((i * 340 + frame * 0.2) % (c.width + 160)) - 80;
+        const cly = c.height * (0.12 + i * 0.09);
+        cx.fillRect(clx, cly, 64, 12);
+        cx.fillRect(clx + 14, cly - 9, 34, 10);
+      }
+
+      const duneY = c.height - 110;
 
       // sand dunes
       cx.fillStyle = '#d9a441';
+      cx.fillRect(0, duneY, c.width, c.height - duneY);
+      cx.fillStyle = '#e8c84a';
       cx.beginPath();
-      cx.moveTo(0, horizon);
-      for (let x = 0; x <= c.width; x += 20) {
-        cx.lineTo(x, horizon + Math.sin(x * 0.01) * 12);
+      cx.moveTo(0, duneY + 14);
+      for (let x = 0; x <= c.width; x += 24) {
+        cx.lineTo(x, duneY + 14 + Math.sin(x * 0.012 + 1) * 10);
       }
-      cx.lineTo(c.width, c.height);
-      cx.lineTo(0, c.height);
+      cx.lineTo(c.width, duneY + 44);
+      cx.lineTo(0, duneY + 44);
       cx.fill();
-      cx.fillStyle = '#b8842f';
-      cx.fillRect(0, c.height - 30, c.width, 30);
 
-      // gems twinkle
+      // palms between the walls
+      drawPalm(c.width * 0.32, duneY + 24, 90);
+      drawPalm(c.width * 0.62, duneY + 18, 70);
+
+      // flanking Agrabah walls
+      const wallW = Math.max(90, c.width * 0.2);
+      drawWall(0, wallW, duneY);
+      drawWall(c.width - wallW, wallW, duneY);
+
+      // golden lamp with smoke wisp (upper sky)
+      const lampX = c.width * 0.3;
+      const lampY = c.height * 0.16 + Math.sin(frame * 0.025) * 6;
+      cx.fillStyle = '#ffd23f';
+      cx.beginPath();
+      cx.ellipse(lampX, lampY, 22, 11, 0, 0, Math.PI * 2);
+      cx.fill();
+      cx.fillRect(lampX - 34, lampY - 5, 16, 5); // spout
+      cx.fillStyle = '#e8a030';
+      cx.fillRect(lampX - 8, lampY - 16, 16, 6); // lid
+      cx.beginPath(); // handle
+      cx.arc(lampX + 24, lampY - 4, 8, -Math.PI / 2, Math.PI / 2);
+      cx.lineWidth = 3.5;
+      cx.strokeStyle = '#e8a030';
+      cx.stroke();
+      // smoke puffs drifting up from the spout
+      cx.fillStyle = 'rgba(120,120,130,0.45)';
+      for (let p = 0; p < 4; p++) {
+        const t = ((frame * 0.012 + p * 0.25) % 1);
+        const px2 = lampX - 30 - t * 50 + Math.sin(t * 9 + p) * 8;
+        const py2 = lampY - 12 - t * 60;
+        const r = 5 + t * 10;
+        cx.beginPath();
+        cx.arc(px2, py2, r, 0, Math.PI * 2);
+        cx.fill();
+      }
+
+      // gems on the dunes, gentle twinkle
       gems.forEach((gm) => {
-        gm.tw += 0.06;
-        const s = 6 + Math.sin(gm.tw) * 3;
-        const gx = gm.x * c.width, gy = gm.y * c.height;
+        gm.tw += 0.05;
+        const s = 5 + Math.sin(gm.tw) * 2;
+        const gx = gm.x * c.width, gy = duneY + 36;
         cx.fillStyle = gm.color;
         cx.beginPath();
         cx.moveTo(gx, gy - s);
@@ -493,12 +370,12 @@ document.addEventListener('DOMContentLoaded', () => {
         cx.closePath();
         cx.fill();
         cx.fillStyle = 'rgba(255,255,255,0.7)';
-        cx.fillRect(gx - 2, gy - 2, 3, 3);
+        cx.fillRect(gx - 1, gy - 2, 2, 2);
       });
 
       // magic carpet drifting
-      const carpetX = ((frame * 0.6) % (c.width + 160)) - 80;
-      const carpetY = c.height * 0.35 + Math.sin(frame * 0.03) * 14;
+      const carpetX = ((frame * 0.55) % (c.width + 160)) - 80;
+      const carpetY = c.height * 0.34 + Math.sin(frame * 0.03) * 12;
       cx.save();
       cx.translate(carpetX, carpetY);
       cx.fillStyle = '#b3306b';
@@ -507,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
       cx.fillRect(0, 4, 60, 3);
       cx.fillStyle = '#4ecdc4';
       for (let t = 0; t < 60; t += 10) cx.fillRect(t, 11, 4, 8);
-      // tassels wave
       cx.fillStyle = '#b3306b';
       cx.fillRect(-6, 2 + Math.sin(frame * 0.2) * 2, 6, 4);
       cx.fillRect(60, 2 + Math.cos(frame * 0.2) * 2, 6, 4);
@@ -613,62 +489,163 @@ document.addEventListener('DOMContentLoaded', () => {
     draw();
   }
 
-  // ===== CONTACT: DOOM (hell) =====
-  function createDoomHell(container) {
+  // ===== CONTACT: POCAHONTAS (Sega Genesis forest + flowing river) =====
+  function createRiverForest(container) {
     const { c } = makeCanvas(container);
     const cx = c.getContext('2d');
     let frame = 0;
 
+    const leaves = Array.from({ length: 9 }, (_, i) => ({
+      x0: (i * 0.13) % 1, y0: 0.16 + ((i * 0.17) % 0.5),
+      sp: 0.0011 + (i % 4) * 0.0004,
+      amp: 22 + (i % 3) * 14, ph: i * 1.3,
+      color: ['#e88aa0', '#f2a65a', '#ffd23f', '#e86a5a'][i % 4],
+      s: 5 + (i % 3) * 2,
+    }));
+    const fireflies = Array.from({ length: 4 }, (_, i) => ({
+      x: 0.22 + i * 0.18, y: 0.38 + (i % 2) * 0.18, ph: i * 1.7,
+    }));
+
+    function drawTrunk(x, w, topY, bottomY, color) {
+      cx.fillStyle = color;
+      cx.beginPath();
+      cx.moveTo(x, bottomY);
+      cx.lineTo(x + w * 0.18, topY);
+      cx.lineTo(x + w * 0.82, topY);
+      cx.lineTo(x + w, bottomY);
+      cx.closePath();
+      cx.fill();
+    }
+
     function draw() {
+      // deep blue-teal forest gradient
       const grad = cx.createLinearGradient(0, 0, 0, c.height);
-      grad.addColorStop(0, '#2a0808');
-      grad.addColorStop(0.5, '#5a1408');
-      grad.addColorStop(1, '#1a0404');
+      grad.addColorStop(0, '#0d2b3e');
+      grad.addColorStop(0.65, '#123a38');
+      grad.addColorStop(1, '#14352c');
       cx.fillStyle = grad;
       cx.fillRect(0, 0, c.width, c.height);
 
-      const horizon = c.height - 110;
+      const groundY = c.height - 150;
 
-      // jagged mountains
-      cx.fillStyle = '#1a0606';
-      cx.beginPath();
-      cx.moveTo(0, horizon);
-      let up = true;
-      for (let x = 0; x <= c.width; x += 40) {
-        cx.lineTo(x, horizon - (up ? 50 : 14));
-        up = !up;
-      }
-      cx.lineTo(c.width, c.height);
-      cx.lineTo(0, c.height);
-      cx.fill();
-
-      // distant imp silhouettes
-      [0.25, 0.55].forEach((p, i) => {
-        const ix = p * c.width;
-        const iy = horizon - 6 + Math.sin(frame * 0.06 + i) * 3;
-        cx.fillStyle = '#3a0c0c';
-        cx.fillRect(ix - 8, iy - 22, 16, 18);
-        cx.fillRect(ix - 12, iy - 16, 4, 10);
-        cx.fillRect(ix + 8, iy - 16, 4, 10);
-        cx.fillRect(ix - 6, iy - 4, 5, 8);
-        cx.fillRect(ix + 1, iy - 4, 5, 8);
-        // glowing eyes
-        cx.fillStyle = '#ff3b2b';
-        cx.fillRect(ix - 5, iy - 17, 3, 3);
-        cx.fillRect(ix + 2, iy - 17, 3, 3);
+      // distant lighter trunks for depth
+      [0.2, 0.46, 0.6, 0.86].forEach((fx, i) => {
+        drawTrunk(fx * c.width, 26 + (i % 2) * 10, c.height * 0.06, groundY + 20, '#1b4a52');
       });
 
-      // fire strip
-      const fireY = c.height - 40;
-      for (let x = 0; x < c.width; x += 8) {
-        const h = 20 + Math.sin(x * 0.3 + frame * 0.3) * 10 + Math.random() * 10;
-        cx.fillStyle = '#ff6b1a';
-        cx.fillRect(x, fireY - h, 8, h);
-        cx.fillStyle = '#ffd23f';
-        cx.fillRect(x + 2, fireY - h * 0.5, 4, h * 0.5);
+      // dark canopy masses along the top
+      cx.fillStyle = '#0a2520';
+      for (let i = 0; i < 6; i++) {
+        const ex = (i / 5) * c.width;
+        cx.beginPath();
+        cx.ellipse(ex, -10, 140, 70 + (i % 3) * 26, 0, 0, Math.PI * 2);
+        cx.fill();
       }
-      cx.fillStyle = '#7a1e08';
-      cx.fillRect(0, fireY, c.width, 40);
+
+      // big foreground tree on the left with a curving branch
+      cx.fillStyle = '#0a1f2e';
+      cx.beginPath();
+      cx.moveTo(c.width * 0.02, c.height);
+      cx.lineTo(c.width * 0.05, 0);
+      cx.lineTo(c.width * 0.13, 0);
+      cx.lineTo(c.width * 0.12, c.height);
+      cx.closePath();
+      cx.fill();
+      cx.strokeStyle = '#0a1f2e';
+      cx.lineWidth = 18;
+      cx.lineCap = 'round';
+      cx.beginPath();
+      cx.moveTo(c.width * 0.1, c.height * 0.22);
+      cx.quadraticCurveTo(c.width * 0.3, c.height * 0.3, c.width * 0.42, c.height * 0.16);
+      cx.stroke();
+      // hanging vines from the branch
+      cx.strokeStyle = '#11332c';
+      cx.lineWidth = 3;
+      [0.2, 0.28, 0.36].forEach((fx, i) => {
+        const vx = fx * c.width;
+        cx.beginPath();
+        cx.moveTo(vx, c.height * 0.24);
+        cx.quadraticCurveTo(vx + Math.sin(frame * 0.02 + i) * 5, c.height * 0.33, vx - 3, c.height * 0.42);
+        cx.stroke();
+      });
+
+      // mossy ground ledge
+      cx.fillStyle = '#2e7d4f';
+      cx.fillRect(0, groundY, c.width, 64);
+      cx.fillStyle = '#56b86b';
+      cx.beginPath();
+      cx.moveTo(0, groundY + 8);
+      for (let x = 0; x <= c.width; x += 26) {
+        cx.lineTo(x, groundY + 8 + Math.sin(x * 0.05) * 5);
+      }
+      cx.lineTo(c.width, groundY);
+      cx.lineTo(0, groundY);
+      cx.fill();
+      cx.fillStyle = '#1f5c3a';
+      cx.fillRect(0, groundY + 56, c.width, 8);
+
+      // flowing river
+      const riverY = c.height - 90;
+      cx.fillStyle = '#1b3a6b';
+      cx.fillRect(0, riverY, c.width, 90);
+      cx.fillStyle = '#142b50';
+      cx.fillRect(0, riverY, c.width, 7);
+      // two ripple layers scrolling at different speeds
+      for (let rowI = 0; rowI < 3; rowI++) {
+        const ry = riverY + 22 + rowI * 22;
+        for (let i = 0; i < Math.ceil(c.width / 90) + 1; i++) {
+          const rx = ((i * 90 + frame * (1.1 + rowI * 0.35) + rowI * 45) % (c.width + 90)) - 45;
+          const bob = Math.sin(frame * 0.05 + i + rowI) * 2;
+          cx.fillStyle = rowI === 1 ? 'rgba(111,159,216,0.65)' : 'rgba(63,111,174,0.7)';
+          cx.beginPath();
+          cx.roundRect(rx, ry + bob, 38 - rowI * 6, 4, 2);
+          cx.fill();
+        }
+      }
+      // lily pads
+      [0.3, 0.64].forEach((fx, i) => {
+        const lx = fx * c.width;
+        const ly = riverY + 34 + i * 18 + Math.sin(frame * 0.04 + i * 2) * 2;
+        cx.fillStyle = '#3a8f5f';
+        cx.beginPath();
+        cx.ellipse(lx, ly, 17, 7, 0, 0, Math.PI * 2);
+        cx.fill();
+        cx.fillStyle = '#1b3a6b';
+        cx.beginPath();
+        cx.moveTo(lx, ly);
+        cx.lineTo(lx + 17, ly - 4);
+        cx.lineTo(lx + 17, ly + 4);
+        cx.closePath();
+        cx.fill();
+      });
+
+      // drifting leaves (colors of the wind)
+      leaves.forEach((lf) => {
+        const t = (lf.x0 + frame * lf.sp) % 1.12;
+        const lx = t * (c.width + 60) - 30;
+        const ly = lf.y0 * c.height + Math.sin(t * 7 + lf.ph) * lf.amp;
+        const rot = Math.sin(t * 11 + lf.ph) * 0.9;
+        cx.save();
+        cx.translate(lx, ly);
+        cx.rotate(rot);
+        cx.fillStyle = lf.color;
+        cx.beginPath();
+        cx.ellipse(0, 0, lf.s, lf.s * 0.45, 0, 0, Math.PI * 2);
+        cx.fill();
+        cx.restore();
+      });
+
+      // fireflies
+      fireflies.forEach((ff) => {
+        const a = 0.25 + (Math.sin(frame * 0.05 + ff.ph) + 1) * 0.3;
+        const fx = ff.x * c.width + Math.sin(frame * 0.013 + ff.ph) * 24;
+        const fy = ff.y * c.height + Math.cos(frame * 0.017 + ff.ph) * 16;
+        const fg = cx.createRadialGradient(fx, fy, 0, fx, fy, 9);
+        fg.addColorStop(0, 'rgba(255,240,150,' + a + ')');
+        fg.addColorStop(1, 'rgba(255,240,150,0)');
+        cx.fillStyle = fg;
+        cx.fillRect(fx - 9, fy - 9, 18, 18);
+      });
 
       frame++;
       requestAnimationFrame(draw);
@@ -681,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
   createMarioLevel(document.getElementById('exp-bg'));
   createAgrabah(document.getElementById('proj-bg'));
   createGargoyles(document.getElementById('edu-bg'));
-  createDoomHell(document.getElementById('contact-bg'));
+  createRiverForest(document.getElementById('contact-bg'));
 
   // ===== TRANSITION OVERLAY =====
   const overlay = document.getElementById('transition-overlay');
@@ -695,92 +672,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let transitionActive = false;
 
+  const themeStyles = {
+    space:      { colors: ['#0d0d2a', '#5fd0ff'], motif: 'star' },
+    mario:      { colors: ['#5c94fc', '#ffd23f'], motif: 'coin' },
+    aladdin:    { colors: ['#c97a2a', '#ffd23f'], motif: 'sparkle' },
+    gargoyles:  { colors: ['#0a0618', '#7e57c2'], motif: 'bat' },
+    pocahontas: { colors: ['#0d2b3e', '#56b86b'], motif: 'leaf' },
+  };
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function drawMotif(g, x, y, motif, color, t) {
+    g.save();
+    g.translate(x, y);
+    if (motif === 'star') {
+      g.fillStyle = color;
+      g.fillRect(-1.5, -7, 3, 14);
+      g.fillRect(-7, -1.5, 14, 3);
+    } else if (motif === 'coin') {
+      const w = Math.abs(Math.cos(t * 9)) * 12 + 3;
+      g.fillStyle = color;
+      g.beginPath();
+      g.ellipse(0, 0, w / 2, 9, 0, 0, Math.PI * 2);
+      g.fill();
+    } else if (motif === 'sparkle') {
+      g.rotate(t * 3);
+      g.fillStyle = color;
+      g.beginPath();
+      g.moveTo(0, -8); g.lineTo(2.5, -2.5); g.lineTo(8, 0); g.lineTo(2.5, 2.5);
+      g.lineTo(0, 8); g.lineTo(-2.5, 2.5); g.lineTo(-8, 0); g.lineTo(-2.5, -2.5);
+      g.closePath();
+      g.fill();
+    } else if (motif === 'bat') {
+      const flap = Math.sin(t * 18) * 5;
+      g.fillStyle = color;
+      g.fillRect(-3, -4, 6, 9);
+      g.beginPath();
+      g.moveTo(-3, 0); g.lineTo(-16, -4 - flap); g.lineTo(-9, 4); g.closePath(); g.fill();
+      g.beginPath();
+      g.moveTo(3, 0); g.lineTo(16, -4 - flap); g.lineTo(9, 4); g.closePath(); g.fill();
+    } else if (motif === 'leaf') {
+      g.rotate(Math.sin(t * 6) * 1.2);
+      g.fillStyle = color;
+      g.beginPath();
+      g.ellipse(0, 0, 8, 3.5, 0, 0, Math.PI * 2);
+      g.fill();
+    }
+    g.restore();
+  }
+
+  // One unified soft wipe: a translucent two-color gradient band sweeps down
+  // the screen with a few theme motifs riding it. Eased, brief, non-blocking.
   function playTransition(theme) {
-    if (transitionActive) return;
+    if (transitionActive || !themeStyles[theme]) return;
     transitionActive = true;
     overlay.classList.add('active');
+    const { colors, motif } = themeStyles[theme];
     const W = overlay.width, H = overlay.height;
     const start = performance.now();
-    const dur = 800;
+    const dur = 650;
+    const bandH = H * 0.7;
 
     function frame(now) {
       const t = Math.min(1, (now - start) / dur);
+      const e = easeInOutCubic(t);
       octx.clearRect(0, 0, W, H);
 
-      if (theme === 'space') {
-        // warp stars + ship streak
-        for (let i = 0; i < 60; i++) {
-          const a = (i / 60) * Math.PI * 2;
-          const r = t * Math.max(W, H);
-          octx.strokeStyle = 'rgba(150,200,255,' + (1 - t) + ')';
-          octx.lineWidth = 2;
-          octx.beginPath();
-          octx.moveTo(W / 2 + Math.cos(a) * r * 0.6, H / 2 + Math.sin(a) * r * 0.6);
-          octx.lineTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r);
-          octx.stroke();
-        }
-        const shx = t * (W + 200) - 100;
-        octx.fillStyle = '#5fd0ff';
-        octx.fillRect(shx, H / 2 - 8, 40, 16);
-        octx.fillStyle = '#ffd23f';
-        octx.fillRect(shx - 30, H / 2 - 2, 30, 4);
-      } else if (theme === 'mario') {
-        // coins sweep + green band
-        octx.fillStyle = 'rgba(92,148,252,' + (1 - Math.abs(t - 0.5) * 2) * 0.5 + ')';
-        octx.fillRect(0, 0, W, H);
-        for (let i = 0; i < 12; i++) {
-          const cxp = (i / 12) * W;
-          const cyp = H * 0.5 - Math.sin(t * Math.PI + i) * 120;
-          const w = Math.abs(Math.cos(t * 8 + i)) * 18 + 4;
-          octx.fillStyle = '#ffd23f';
-          octx.fillRect(cxp - w / 2, cyp, w, 28);
-        }
-      } else if (theme === 'aladdin') {
-        // carpet swoosh + sparkles
-        const cxp = t * (W + 240) - 120;
-        const cyp = H * 0.5 + Math.sin(t * Math.PI) * -60;
-        octx.save();
-        octx.translate(cxp, cyp);
-        octx.rotate(Math.sin(t * Math.PI) * 0.2);
-        octx.fillStyle = '#b3306b';
-        octx.fillRect(0, 0, 90, 20);
-        octx.fillStyle = '#ffd23f';
-        octx.fillRect(0, 6, 90, 4);
-        octx.restore();
-        for (let i = 0; i < 20; i++) {
-          const sx = cxp - i * 14;
-          const sy = cyp + Math.sin(i + t * 10) * 16 + 10;
-          octx.fillStyle = 'rgba(255,230,109,' + (1 - i / 20) + ')';
-          octx.fillRect(sx, sy, 4, 4);
-        }
-      } else if (theme === 'gargoyles') {
-        // dark stone shutter from top+bottom + gliding bat
-        const band = (t < 0.5 ? t : 1 - t) * H;
-        octx.fillStyle = '#0a0618';
-        octx.fillRect(0, 0, W, band);
-        octx.fillRect(0, H - band, W, band);
-        const bx = W - t * (W + 200) + 100;
-        const by = H * 0.4 + Math.sin(t * 10) * 30;
-        const flap = Math.sin(t * 30) * 14;
-        octx.fillStyle = '#000';
-        octx.fillRect(bx - 5, by, 10, 16);
-        octx.beginPath();
-        octx.moveTo(bx - 5, by + 2); octx.lineTo(bx - 46, by - flap); octx.lineTo(bx - 28, by + 8); octx.fill();
-        octx.beginPath();
-        octx.moveTo(bx + 5, by + 2); octx.lineTo(bx + 46, by - flap); octx.lineTo(bx + 28, by + 8); octx.fill();
-      } else if (theme === 'doom') {
-        // red flash + muzzle burst
-        const a = (1 - Math.abs(t - 0.3) / 0.7);
-        octx.fillStyle = 'rgba(170,20,10,' + Math.max(0, a) * 0.7 + ')';
-        octx.fillRect(0, 0, W, H);
-        if (t < 0.4) {
-          octx.fillStyle = '#ffd23f';
-          const r = (0.4 - t) * 400;
-          octx.beginPath();
-          octx.arc(W * 0.7, H * 0.6, r, 0, Math.PI * 2);
-          octx.fill();
-        }
+      // fade envelope so the wipe eases in and out
+      octx.globalAlpha = Math.sin(t * Math.PI) * 0.85;
+
+      const bandY = e * (H + bandH * 2) - bandH;
+      const g = octx.createLinearGradient(0, bandY - bandH / 2, 0, bandY + bandH / 2);
+      g.addColorStop(0, 'rgba(0,0,0,0)');
+      g.addColorStop(0.3, colors[0]);
+      g.addColorStop(0.7, colors[1]);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      octx.fillStyle = g;
+      octx.fillRect(0, bandY - bandH / 2, W, bandH);
+
+      // motifs riding the band
+      for (let i = 0; i < 7; i++) {
+        const mx = ((i + 0.5) / 7) * W + Math.sin(t * 4 + i * 2) * 24;
+        const my = bandY + Math.sin(i * 1.8) * bandH * 0.18;
+        drawMotif(octx, mx, my, motif, i % 2 ? colors[1] : 'rgba(255,255,255,0.9)', t + i * 0.3);
       }
+
+      octx.globalAlpha = 1;
 
       if (t < 1) {
         requestAnimationFrame(frame);
@@ -794,58 +773,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== CHARACTER POSE + SPEECH + TRANSITION PER SECTION =====
-  const character = document.getElementById('character');
   const speech = document.getElementById('char-speech');
   const sectionOrder = ['hero', 'experience', 'projects', 'education', 'contact'];
 
   const poseMap = {
-    hero:       { pose: 'wave',      text: 'Pew pew!',          theme: 'space',     opts: {} },
-    experience: { pose: 'point',     text: 'Lets-a go!',        theme: 'mario',     opts: { mustache: true } },
-    projects:   { pose: 'celebrate', text: 'A whole new world!',theme: 'aladdin',   opts: {} },
-    education:  { pose: 'thumbsup',  text: 'We live again!',    theme: 'gargoyles', opts: {} },
-    contact:    { pose: 'shoot',     text: 'Rip and tear!',     theme: 'doom',      opts: {} },
+    hero:       { pose: 'wave',      text: "Hi, I'm Fedor!",            theme: 'space',      opts: {} },
+    experience: { pose: 'point',     text: 'Lets-a go!',                theme: 'mario',      opts: { mustache: true } },
+    projects:   { pose: 'celebrate', text: 'A whole new world!',        theme: 'aladdin',    opts: {} },
+    education:  { pose: 'thumbsup',  text: 'We live again!',            theme: 'gargoyles',  opts: {} },
+    contact:    { pose: 'open',      text: 'Just around the riverbend!',theme: 'pocahontas', opts: {} },
   };
 
   let currentSection = '';
-  let animInterval = null;
 
-  function startIdle(id) {
-    if (animInterval) clearInterval(animInterval);
-    const { pose, opts } = poseMap[id];
-    if (pose === 'wave') {
-      let t = false;
-      animInterval = setInterval(() => { t = !t; drawCharacter(t ? 'wave' : 'default', opts); }, 550);
-    } else if (pose === 'shoot') {
-      let t = false;
-      animInterval = setInterval(() => { t = !t; drawCharacter('shoot', { flash: t }); }, 400);
+  // The observer only signals that a section boundary crossed the viewport
+  // center band; the active section itself is derived from current geometry.
+  // (Entry order is not reliable when jumping across several sections.)
+  function updateActiveSection() {
+    const mid = window.innerHeight / 2;
+    for (const id of sectionOrder) {
+      const r = document.getElementById(id).getBoundingClientRect();
+      if (r.top <= mid && r.bottom >= mid) {
+        if (id !== currentSection && poseMap[id]) {
+          const isFirst = currentSection === '';
+          currentSection = id;
+          const { pose, text, theme, opts } = poseMap[id];
+
+          setPose(pose, opts);
+
+          speech.textContent = text;
+          speech.classList.add('visible');
+          clearTimeout(speech._hideTimer);
+          speech._hideTimer = setTimeout(() => speech.classList.remove('visible'), 3000);
+
+          if (!isFirst) playTransition(theme);
+        }
+        break;
+      }
     }
   }
 
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-          const id = entry.target.id;
-          if (id !== currentSection && poseMap[id]) {
-            const isFirst = currentSection === '';
-            currentSection = id;
-            const { pose, text, theme, opts } = poseMap[id];
-
-            drawCharacter(pose, opts);
-            startIdle(id);
-
-            speech.textContent = text;
-            speech.classList.add('visible');
-            clearTimeout(speech._hideTimer);
-            speech._hideTimer = setTimeout(() => speech.classList.remove('visible'), 3000);
-
-            if (!isFirst) playTransition(theme);
-          }
-        }
-      });
-    },
-    { threshold: [0.4] }
-  );
+  const sectionObserver = new IntersectionObserver(updateActiveSection, {
+    rootMargin: '-45% 0px -45% 0px',
+    threshold: 0,
+  });
 
   sectionOrder.forEach((id) => {
     const el = document.getElementById(id);
