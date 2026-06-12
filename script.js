@@ -660,57 +660,16 @@ document.addEventListener('DOMContentLoaded', () => {
   createGargoyles(document.getElementById('edu-bg'));
   createRiverForest(document.getElementById('contact-bg'));
 
-  // ===== TRANSITION OVERLAY =====
-  const overlay = document.getElementById('transition-overlay');
-  const octx = overlay.getContext('2d');
-  function sizeOverlay() {
-    overlay.width = window.innerWidth;
-    overlay.height = window.innerHeight;
-  }
-  sizeOverlay();
-  window.addEventListener('resize', sizeOverlay);
-
-  let transitionActive = false;
-
-  // Simple dip-to-dark cross-fade between sections. Brief and subtle,
-  // no shapes or wipes; just softens the change of scenery.
-  function playTransition() {
-    if (transitionActive) return;
-    transitionActive = true;
-    overlay.classList.add('active');
-    const W = overlay.width, H = overlay.height;
-    const start = performance.now();
-    const dur = 450;
-
-    function frame(now) {
-      const t = Math.min(1, (now - start) / dur);
-      octx.clearRect(0, 0, W, H);
-      octx.globalAlpha = Math.sin(t * Math.PI) * 0.45;
-      octx.fillStyle = '#10101e';
-      octx.fillRect(0, 0, W, H);
-      octx.globalAlpha = 1;
-
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        octx.clearRect(0, 0, W, H);
-        overlay.classList.remove('active');
-        transitionActive = false;
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  // ===== CHARACTER POSE + SPEECH + TRANSITION PER SECTION =====
+  // ===== CHARACTER POSE + SPEECH PER SECTION =====
   const speech = document.getElementById('char-speech');
   const sectionOrder = ['hero', 'experience', 'projects', 'education', 'contact'];
 
   const poseMap = {
-    hero:       { pose: 'wave',      text: "Hi, I'm Fedor!",            theme: 'space',      opts: {} },
-    experience: { pose: 'point',     text: 'Lets-a go!',                theme: 'mario',      opts: { mustache: true } },
-    projects:   { pose: 'celebrate', text: 'A whole new world!',        theme: 'aladdin',    opts: {} },
-    education:  { pose: 'thumbsup',  text: 'We live again!',            theme: 'gargoyles',  opts: {} },
-    contact:    { pose: 'open',      text: 'Just around the riverbend!',theme: 'pocahontas', opts: {} },
+    hero:       { pose: 'wave',      text: "Hi, I'm Fedor!",             opts: {} },
+    experience: { pose: 'point',     text: 'Lets-a go!',                 opts: { mustache: true } },
+    projects:   { pose: 'celebrate', text: 'A whole new world!',         opts: {} },
+    education:  { pose: 'thumbsup',  text: 'We live again!',             opts: {} },
+    contact:    { pose: 'open',      text: 'Just around the riverbend!', opts: {} },
   };
 
   let currentSection = '';
@@ -724,9 +683,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const r = document.getElementById(id).getBoundingClientRect();
       if (r.top <= mid && r.bottom >= mid) {
         if (id !== currentSection && poseMap[id]) {
-          const isFirst = currentSection === '';
           currentSection = id;
-          const { pose, text, theme, opts } = poseMap[id];
+          const { pose, text, opts } = poseMap[id];
 
           setPose(pose, opts);
 
@@ -734,8 +692,6 @@ document.addEventListener('DOMContentLoaded', () => {
           speech.classList.add('visible');
           clearTimeout(speech._hideTimer);
           speech._hideTimer = setTimeout(() => speech.classList.remove('visible'), 3000);
-
-          if (!isFirst) playTransition(theme);
         }
         break;
       }
@@ -751,4 +707,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(id);
     if (el) sectionObserver.observe(el);
   });
+
+  // ===== CHARACTER LANDS ON THE GRASS (page finale) =====
+  // The character normally floats centered in the viewport. As the contact
+  // section scrolls into view he glides down and plants his feet on the mossy
+  // river bank, so scrolling to the end of the page grounds him on the grass.
+  const charSvg = document.getElementById('char-svg');
+  const contactSection = document.getElementById('contact');
+
+  function groundCharacter() {
+    const svgH = charSvg.getBoundingClientRect().height;
+    if (!svgH) return; // character hidden on small screens
+    const r = contactSection.getBoundingClientRect();
+    const half = window.innerHeight / 2;
+    // 0 while contact is below mid-viewport, 1 once it fills the viewport
+    const p = Math.min(1, Math.max(0, 1 - r.top / half));
+    if (p > 0) {
+      const groundY = r.bottom - 112;
+      const centeredFeetY = half + svgH / 2;
+      const feetY = centeredFeetY + (groundY - centeredFeetY) * p;
+      character.style.transform = 'translateY(' + (feetY - svgH - half) + 'px)';
+    } else {
+      character.style.transform = '';
+    }
+  }
+  window.addEventListener('scroll', groundCharacter, { passive: true });
+  window.addEventListener('resize', groundCharacter);
+  groundCharacter();
 });
