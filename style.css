@@ -15,6 +15,7 @@
   --card-shadow: 4px 4px 0px #2d2d2d;
   --card-border: 3px solid #2d2d2d;
   --radius: 12px;
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 html {
@@ -238,10 +239,14 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--card-shadow);
   padding: 28px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
+/* lift only cards that lead somewhere */
+.project-card {
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.project-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px #2d2d2d;
 }
@@ -334,6 +339,11 @@ body {
 }
 
 /* ===== Projects ===== */
+.projects {
+  padding-top: 130px;
+  padding-bottom: 110px;
+}
+
 .projects-grid {
   display: flex;
   flex-direction: column;
@@ -477,7 +487,7 @@ a.project-name:hover {
   font-family: 'Baloo 2', cursive;
   font-size: 0.95rem;
   font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
 }
 
 .contact-btn:hover {
@@ -502,7 +512,7 @@ footer {
 .wobble {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
 }
 
 .wobble.visible {

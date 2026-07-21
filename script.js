@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Scroll-reveal observer
   const observer = new IntersectionObserver(
     (entries) => {
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bullets = bullets.filter((b) => b.y > -20);
 
       frame++;
-      requestAnimationFrame(draw);
+      if (!reducedMotion) requestAnimationFrame(draw);
     }
     draw();
   }
@@ -211,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cx.fillRect(0, groundY, c.width, 4);
 
       frame++;
-      requestAnimationFrame(draw);
+      if (!reducedMotion) requestAnimationFrame(draw);
     }
     draw();
   }
@@ -390,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cx.restore();
 
       frame++;
-      requestAnimationFrame(draw);
+      if (!reducedMotion) requestAnimationFrame(draw);
     }
     draw();
   }
@@ -484,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cx.fill();
 
       frame++;
-      requestAnimationFrame(draw);
+      if (!reducedMotion) requestAnimationFrame(draw);
     }
     draw();
   }
@@ -648,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       frame++;
-      requestAnimationFrame(draw);
+      if (!reducedMotion) requestAnimationFrame(draw);
     }
     draw();
   }
@@ -665,8 +666,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sectionOrder = ['hero', 'experience', 'projects', 'education', 'contact'];
 
   const poseMap = {
-    hero:       { pose: 'wave',      text: "Hi, I'm Fedor!",             opts: {} },
-    experience: { pose: 'point',     text: 'Lets-a go!',                 opts: { mustache: true } },
+    hero:       { pose: 'wave',      text: 'Hi, I’m Fedor!',             opts: {} },
+    experience: { pose: 'point',     text: 'Let’s-a go!',                 opts: { mustache: true } },
     projects:   { pose: 'celebrate', text: 'A whole new world!',         opts: {} },
     education:  { pose: 'thumbsup',  text: 'We live again!',             opts: {} },
     contact:    { pose: 'open',      text: 'Just around the riverbend!', opts: {} },
