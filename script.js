@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function drawInvader(ix, iy, ph) {
       const u = Math.max(3, c.width / 110);
-      const bob = Math.sin(frame * 0.05 + ph) * u;
+      const bob = Math.sin(frame * 0.02 + ph) * u;
       cx.fillStyle = '#b39ddb';
       cx.fillRect(ix - 1.5 * u, iy + bob, 3 * u, 2 * u);
       cx.fillRect(ix - 2.5 * u, iy + u + bob, 5 * u, u);
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
       invaders.forEach((inv) => drawInvader(inv.x * c.width, inv.y * c.height, inv.phase));
 
       // move ship
-      ship.x += ship.dir * 0.0025;
+      ship.x += ship.dir * 0.001;
       if (ship.x > 0.85 || ship.x < 0.15) ship.dir *= -1;
       const sx = ship.x * c.width;
       const sy = ship.y * c.height;
