@@ -111,7 +111,7 @@ python -m http.server 8000
 
 ## Get in touch
 
-Want to collaborate, chat about AI agents, or just say hi?
+Always up for talking agents, automation, or whatever you're building. Say hi.
 
 [GitHub](https://github.com/FedorNaumenko) ·
 [LinkedIn](https://www.linkedin.com/in/fedor-naumenko/) ·

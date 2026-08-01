@@ -8,25 +8,37 @@
 :root {
   --text-primary: #2d2d2d;
   --text-secondary: #555;
+  --paper: #fff;
   --accent: #ff6b6b;
-  --accent-2: #4ecdc4;
+  --accent-deep: #d1362f;   /* accent on light surfaces — 4.6:1 on cards */
+  --accent-2: #0f7d73;      /* teal on light surfaces — 4.7:1 on cards */
   --accent-3: #ffe66d;
+  --surface-dark: #1a1a2e;
+  --surface-darker: #0d0d1a;
+  --surface-edge: #33334a;
+  --on-dark-strong: rgba(255,255,255,0.85);
+  --on-dark-soft: rgba(255,255,255,0.65);
+  --on-dark-mid: rgba(255,255,255,0.5);
+  --on-dark-faint: rgba(255,255,255,0.3);
   --card-bg: rgba(255,255,255,0.92);
-  --card-shadow: 4px 4px 0px #2d2d2d;
-  --card-border: 3px solid #2d2d2d;
+  --card-shadow: 4px 4px 0px var(--text-primary);
+  --card-shadow-lift: 6px 6px 0px var(--text-primary);
+  --card-shadow-press: 2px 2px 0px var(--text-primary);
+  --card-border: 3px solid var(--text-primary);
   --radius: 12px;
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
   font-family: 'Baloo 2', cursive, sans-serif;
   color: var(--text-primary);
-  background: #1a1a2e;
-  overflow-x: hidden;
+  background: var(--surface-dark);
+  overflow-x: clip;
   line-height: 1.6;
 }
 
@@ -119,8 +131,8 @@ body {
 .has-mustache #char-mustache { display: block; }
 
 .char-speech {
-  background: #fff;
-  border: 3px solid #2d2d2d;
+  background: var(--paper);
+  border: var(--card-border);
   border-radius: 8px;
   padding: 4px 10px;
   font-family: 'Press Start 2P', monospace;
@@ -144,7 +156,7 @@ body {
   transform: translateX(-50%);
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 8px solid #2d2d2d;
+  border-bottom: 8px solid var(--text-primary);
 }
 
 .char-speech.visible {
@@ -186,7 +198,7 @@ body {
   font-size: 2.2rem;
   font-weight: 800;
   margin-bottom: 16px;
-  color: #fff;
+  color: var(--paper);
   text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
   letter-spacing: 2px;
 }
@@ -200,7 +212,7 @@ body {
 
 .hero-blurb {
   font-size: 1.05rem;
-  color: rgba(255,255,255,0.85);
+  color: var(--on-dark-strong);
   margin-bottom: 48px;
   max-width: 550px;
   margin-left: auto;
@@ -215,15 +227,15 @@ body {
   gap: 6px;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.6rem;
-  color: rgba(255,255,255,0.5);
+  color: var(--on-dark-mid);
   letter-spacing: 2px;
 }
 
 .chevron {
   width: 12px;
   height: 12px;
-  border-right: 3px solid rgba(255,255,255,0.5);
-  border-bottom: 3px solid rgba(255,255,255,0.5);
+  border-right: 3px solid var(--on-dark-mid);
+  border-bottom: 3px solid var(--on-dark-mid);
   animation: chevron-bounce 1.5s ease-in-out infinite;
 }
 
@@ -248,17 +260,22 @@ body {
 
 .project-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #2d2d2d;
+  box-shadow: var(--card-shadow-lift);
 }
 
 /* ===== Section Titles ===== */
+/* Dark plate keeps the pixel title readable over the bright Mario/Agrabah skies */
 .section-title {
   font-family: 'Press Start 2P', monospace;
   font-size: 1.4rem;
   font-weight: 800;
-  margin-bottom: 40px;
+  width: fit-content;
+  margin: 0 auto 40px;
+  padding: 12px 20px;
+  background: var(--surface-dark);
+  border-radius: var(--radius);
   text-align: center;
-  color: #fff;
+  color: var(--paper);
   text-shadow: 3px 3px 0px rgba(0,0,0,0.3);
   letter-spacing: 2px;
 }
@@ -279,7 +296,7 @@ body {
   top: 0;
   bottom: 0;
   width: 4px;
-  background: rgba(255,255,255,0.3);
+  background: var(--on-dark-faint);
   border-radius: 2px;
 }
 
@@ -294,7 +311,7 @@ body {
   width: 24px;
   height: 24px;
   background: var(--accent);
-  border: 3px solid #2d2d2d;
+  border: var(--card-border);
   border-radius: 50%;
   z-index: 1;
 }
@@ -306,7 +323,7 @@ body {
   top: 4px;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.55rem;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-primary);
   width: 24px;
   text-align: center;
   transform: translateX(-100%) translateX(-8px);
@@ -336,6 +353,7 @@ body {
 .timeline-item p {
   color: var(--text-secondary);
   font-size: 0.92rem;
+  max-width: 62ch;
 }
 
 /* ===== Projects ===== */
@@ -360,8 +378,8 @@ body {
   width: 280px;
   min-height: 180px;
   flex-shrink: 0;
-  background: #1a1a2e;
-  border: 2px solid #333;
+  background: var(--surface-dark);
+  border: 2px solid var(--surface-edge);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -372,7 +390,7 @@ body {
 .media-placeholder {
   font-family: 'Press Start 2P', monospace;
   font-size: 0.55rem;
-  color: rgba(255,255,255,0.3);
+  color: var(--on-dark-faint);
   text-align: center;
   padding: 12px;
   letter-spacing: 1px;
@@ -402,8 +420,9 @@ body {
   transition: color 0.2s ease;
 }
 
-a.project-name:hover {
-  color: var(--accent);
+a.project-name:hover,
+a.project-name:active {
+  color: var(--accent-deep);
 }
 
 .project-wip-name {
@@ -412,8 +431,8 @@ a.project-name:hover {
 
 .wip-tag {
   display: inline-block;
-  background: var(--accent);
-  color: #fff;
+  background: var(--accent-deep);
+  color: var(--paper);
   font-family: 'Press Start 2P', monospace;
   font-size: 0.5rem;
   padding: 3px 8px;
@@ -426,6 +445,7 @@ a.project-name:hover {
   color: var(--text-secondary);
   font-size: 0.92rem;
   margin-bottom: 12px;
+  max-width: 62ch;
 }
 
 .project-tags {
@@ -436,7 +456,7 @@ a.project-name:hover {
 
 .tag {
   background: var(--accent-3);
-  border: 2px solid #2d2d2d;
+  border: 2px solid var(--text-primary);
   border-radius: 20px;
   padding: 3px 12px;
   font-size: 0.75rem;
@@ -492,13 +512,19 @@ a.project-name:hover {
 
 .contact-btn:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #2d2d2d;
+  box-shadow: var(--card-shadow-lift);
+}
+
+/* pressed: the button sinks onto its shadow */
+.contact-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--card-shadow-press);
 }
 
 /* ===== Footer ===== */
 footer {
-  background: #0d0d1a;
-  color: rgba(255,255,255,0.4);
+  background: var(--surface-darker);
+  color: var(--on-dark-soft);
   text-align: center;
   padding: 20px;
   font-family: 'Press Start 2P', monospace;
@@ -536,6 +562,20 @@ a:focus-visible,
   }
   .char-arm {
     transition: none;
+  }
+  /* reveal + hover collapse to a short crossfade, no spatial motion */
+  .wobble {
+    transform: none;
+    transition: opacity 0.15s linear;
+  }
+  .project-card,
+  .contact-btn {
+    transition: box-shadow 0.15s linear;
+  }
+  .project-card:hover,
+  .contact-btn:hover,
+  .contact-btn:active {
+    transform: none;
   }
   html {
     scroll-behavior: auto;
@@ -580,6 +620,7 @@ a:focus-visible,
   }
   .section-title {
     font-size: 1rem;
+    padding: 10px 14px;
   }
   .card {
     padding: 20px;
