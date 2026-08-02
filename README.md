@@ -76,10 +76,12 @@ with an ack-then-process pattern for Slack's 3-second deadline.
 
 ## Side projects
 
-- **[FPL Solver](https://github.com/FedorNaumenko/fplsolver)** — Fantasy Premier League
+- **[FPL Solver](https://fedornaumenko.github.io/fplsolver/)** — Fantasy Premier League
   transfer advisor built on form, fixtures, and projected points. *TypeScript, Next.js*
-- **[Sal-Kal](https://github.com/FedorNaumenko/Sal-Kal)** — grocery price comparison for
+  · [source](https://github.com/FedorNaumenko/fplsolver)
+- **[Sal-Kal](https://fedornaumenko.github.io/Sal-Kal/)** — grocery price comparison for
   Israeli supermarkets, using published chain price data. *Python, FastAPI, Next.js, Docker*
+  · [source](https://github.com/FedorNaumenko/Sal-Kal)
 - **[AI Subtitles for Stremio](https://github.com/FedorNaumenko/stremio-aisubs)** — Stremio
   addon that transcribes a stream's audio with Groq Whisper and translates it with Gemini,
   so zero-subtitle content gets synced subtitles on the fly. *JavaScript, Docker*
@@ -114,5 +116,5 @@ python -m http.server 8000
 Always up for talking agents, automation, or whatever you're building. Say hi.
 
 [GitHub](https://github.com/FedorNaumenko) ·
-[LinkedIn](https://www.linkedin.com/in/fedor-naumenko/) ·
+[LinkedIn](https://www.linkedin.com/in/fedornaumenko/) ·
 [Email](mailto:fedornaumenko1998@gmail.com)
