@@ -425,18 +425,6 @@ a.project-name:active {
   color: var(--accent-deep);
 }
 
-.project-source {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-left: 12px;
-}
-
-.project-source:hover,
-.project-source:active {
-  color: var(--accent-deep);
-}
-
 .project-wip-name {
   color: var(--text-primary);
 }
