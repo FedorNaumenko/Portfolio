@@ -86,15 +86,11 @@ with an ack-then-process pattern for Slack's 3-second deadline.
 
 ## Skills
 
-**Languages** - Python, Ruby, SQL. Familiar with JavaScript, HTML, CSS.
-
-**AI & agents** - multi-agent orchestration, , Model Context Protocol (MCP), Google ADK, Vertex AI Agent Engine.
-
-**Infrastructure** - GCP, AWS, Docker, Kubernetes.
-
-**Tools** - GitHub, Groundcover, Postman, Kibana, Grafana, ClickUp.
-
-**Spoken** - Hebrew, English, Russian, Ukrainian.
+- **Languages** - Python, Ruby, SQL. Familiar with JavaScript, HTML, CSS.
+- **AI & agents** - multi-agent orchestration, , Model Context Protocol (MCP), Google ADK, Vertex AI Agent Engine.
+- **Infrastructure** - GCP, AWS, Docker, Kubernetes.
+- **Tools** - GitHub, Groundcover, Postman, Kibana, Grafana, ClickUp.
+- **Spoken** - Hebrew, English, Russian, Ukrainian.
 
 ## Education
 
