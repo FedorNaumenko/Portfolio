@@ -709,6 +709,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) sectionObserver.observe(el);
   });
 
+  // ===== DEMO PLAYER =====
+  // One shared <dialog> for all three cards. Native showModal() supplies the
+  // backdrop, Esc-to-dismiss, focus containment and focus restore, so there is
+  // no focus-trap code here. preload="none" means no video byte is fetched
+  // until a card is actually clicked.
+  const modal = document.getElementById('video-modal');
+  const player = document.getElementById('video-player');
+
+  document.querySelectorAll('.project-media[data-video]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      player.poster = btn.dataset.poster;
+      player.src = btn.dataset.video;
+      modal.showModal();
+      // the click is a user gesture, so audio is allowed; if a browser still
+      // refuses, the controls are right there
+      player.play().catch(() => {});
+    });
+  });
+
+  document.getElementById('video-close').addEventListener('click', () => modal.close());
+
+  // a click that lands on the dialog itself hit the backdrop, not the video
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close();
+  });
+
+  // single teardown path, so Esc can't leave audio playing in the background
+  modal.addEventListener('close', () => {
+    player.pause();
+    player.removeAttribute('src');
+    player.load();
+  });
+
   // ===== CHARACTER LANDS ON THE GRASS (page finale) =====
   // The character normally floats centered in the viewport. As the contact
   // section scrolls into view he glides down and plants his feet on the mossy

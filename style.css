@@ -20,6 +20,7 @@
   --on-dark-soft: rgba(255,255,255,0.65);
   --on-dark-mid: rgba(255,255,255,0.5);
   --on-dark-faint: rgba(255,255,255,0.3);
+  --backdrop: rgba(13,13,26,0.88);
   --card-bg: rgba(255,255,255,0.92);
   --card-shadow: 4px 4px 0px var(--text-primary);
   --card-shadow-lift: 6px 6px 0px var(--text-primary);
@@ -374,10 +375,13 @@ body {
   align-items: stretch;
 }
 
+/* Demo thumbnail — a real button, so keyboard activation and role come free */
 .project-media {
   width: 280px;
   min-height: 180px;
   flex-shrink: 0;
+  padding: 0;
+  appearance: none;
   background: var(--surface-dark);
   border: 2px solid var(--surface-edge);
   border-radius: 8px;
@@ -385,22 +389,59 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
+  cursor: pointer;
 }
 
-.media-placeholder {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  color: var(--on-dark-faint);
-  text-align: center;
-  padding: 12px;
-  letter-spacing: 1px;
-}
-
-.project-media img,
-.project-media video {
+/* contain, not cover: these posters are 2:1 screen recordings in a ~1.3:1 well,
+   and cover would crop away the UI the poster exists to show */
+.project-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  transition: filter 0.2s var(--ease-out);
+}
+
+/* play badge, drawn in CSS — no asset, no markup, nothing to hide from AT */
+.project-media::before,
+.project-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: none;
+}
+
+.project-media::before {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--surface-dark);
+  border: 3px solid var(--accent-3);
+}
+
+.project-media::after {
+  width: 0;
+  height: 0;
+  border: 11px solid transparent;
+  border-right: 0;
+  border-left: 18px solid var(--accent-3);
+  transform: translateX(3px);
+}
+
+/* not a lift — .project-card:hover already translates, and nesting two
+   would double-lift the same gesture */
+.project-media:hover img,
+.project-media:focus-visible img {
+  filter: brightness(1.12);
+}
+
+.project-media:hover::before {
+  background: var(--accent-3);
+}
+
+.project-media:hover::after {
+  border-left-color: var(--surface-dark);
 }
 
 .project-info {
@@ -521,6 +562,75 @@ a.project-name:active {
   box-shadow: var(--card-shadow-press);
 }
 
+/* ===== Demo Player (native <dialog>: backdrop, Esc, focus trap all free) ===== */
+/* Full-viewport dialog centring its own content, rather than relying on the UA's
+   `width: fit-content; margin: auto` — overriding max-width/max-height defeats
+   that centring and pins the box to the top-left. It also means everything
+   around the player is the dialog itself, so an outside click is unambiguous. */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+
+.video-modal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.video-modal::backdrop {
+  background: var(--backdrop);
+}
+
+/* shrink-wraps the video so the close button anchors to the player, not the page */
+.video-modal__inner {
+  position: relative;
+}
+
+/* both axes capped, neither forced: wide clips bind on width, the near-square
+   one binds on height — each lands at ~80% of its own axis, undistorted */
+.video-modal video {
+  display: block;
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  border: var(--card-border);
+  border-radius: var(--radius);
+  background: var(--surface-darker);
+}
+
+.video-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  appearance: none;
+  font-family: 'Baloo 2', cursive, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  background: var(--accent-3);
+  color: var(--text-primary);
+  border: var(--card-border);
+  border-radius: 50%;
+  box-shadow: var(--card-shadow);
+}
+
+.video-modal__close:active {
+  box-shadow: var(--card-shadow-press);
+}
+
 /* ===== Footer ===== */
 footer {
   background: var(--surface-darker);
@@ -548,6 +658,8 @@ footer {
 
 /* ===== Accessibility ===== */
 a:focus-visible,
+.project-media:focus-visible,
+.video-modal__close:focus-visible,
 .contact-btn:focus-visible {
   outline: 3px solid var(--accent-3);
   outline-offset: 3px;
@@ -602,6 +714,11 @@ a:focus-visible,
     width: 100%;
     min-height: 160px;
   }
+  /* stacked layout gives the well an indefinite height, so height:100% resolves
+     to auto and the poster sets it — cap it so the near-square one behaves */
+  .project-media img {
+    max-height: 340px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -637,5 +754,9 @@ a:focus-visible,
   .project-media {
     width: 100%;
     min-height: 140px;
+  }
+  .video-modal video {
+    max-width: 94vw;
+    max-height: 78vh;
   }
 }

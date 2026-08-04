@@ -154,9 +154,10 @@
       <div class="projects-grid">
 
         <div class="project-card card">
-          <div class="project-media">
-            <div class="media-placeholder">screenshot coming soon</div>
-          </div>
+          <button class="project-media" data-video="assets/fpl-solver.mp4"
+                  data-poster="assets/fpl-solver.jpg" aria-label="Play the FPL Solver demo">
+            <img src="assets/fpl-solver.jpg" alt="" width="560" height="274" loading="lazy">
+          </button>
           <div class="project-info">
             <a href="https://fedornaumenko.github.io/fplsolver/" target="_blank" rel="noopener" class="project-name">FPL Solver</a>
             <p>Fantasy Premier League transfer advisor. Helps FPL managers pick smarter transfers based on form, fixtures, and projected points.</p>
@@ -169,9 +170,10 @@
         </div>
 
         <div class="project-card card">
-          <div class="project-media">
-            <div class="media-placeholder">screenshot coming soon</div>
-          </div>
+          <button class="project-media" data-video="assets/sal-kal.mp4"
+                  data-poster="assets/sal-kal.jpg" aria-label="Play the Sal-Kal demo">
+            <img src="assets/sal-kal.jpg" alt="" width="560" height="540" loading="lazy">
+          </button>
           <div class="project-info">
             <a href="https://fedornaumenko.github.io/Sal-Kal/" target="_blank" rel="noopener" class="project-name">Sal-Kal</a>
             <p>Grocery price comparison app for Israeli supermarkets. Loads published price data from the major retail chains and compares product prices and promotions across stores.</p>
@@ -185,9 +187,10 @@
         </div>
 
         <div class="project-card card">
-          <div class="project-media">
-            <div class="media-placeholder">demo coming soon</div>
-          </div>
+          <button class="project-media" data-video="assets/ai-subs.mp4"
+                  data-poster="assets/ai-subs.jpg" aria-label="Play the AI Subtitles for Stremio demo">
+            <img src="assets/ai-subs.jpg" alt="" width="560" height="278" loading="lazy">
+          </button>
           <div class="project-info">
             <a href="https://github.com/FedorNaumenko/stremio-aisubs" target="_blank" rel="noopener" class="project-name">AI Subtitles for Stremio</a>
             <p>A Stremio addon that generates subtitles on the fly. It transcribes the stream's actual audio with Groq Whisper and translates it with Gemini, so even zero-subtitle content gets perfectly synced subtitles hands-free.</p>
@@ -248,6 +251,14 @@
   <footer>
     <p>&copy; 2026 Fedor Naumenko</p>
   </footer>
+
+  <!-- Shared demo player: one dialog for all three cards, so no video loads until clicked -->
+  <dialog class="video-modal" id="video-modal" aria-label="Project demo">
+    <div class="video-modal__inner">
+      <video id="video-player" controls preload="none" playsinline></video>
+      <button class="video-modal__close" id="video-close" aria-label="Close demo">&times;</button>
+    </div>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
